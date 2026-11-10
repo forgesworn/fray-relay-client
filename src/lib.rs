@@ -1183,6 +1183,12 @@ fn why(e: &dyn std::fmt::Display) -> String {
     e.to_string().chars().filter(|c| !crate::hidden_char(*c)).take(120).collect()
 }
 
+/// The reason a relay gave for refusing an authentication, as it may be
+/// logged: hidden characters removed, as `why` does, and at most 80 characters.
+fn refusal_text(said: &str) -> String {
+    said.chars().filter(|c| !crate::hidden_char(*c)).take(80).collect()
+}
+
 /// Hold the worker for `wait` (a backoff), still taking commands. A read that
 /// arrives meanwhile is answered at once with a made-up EOSE (counted as
 /// unreachable) so a fetch is not held up; its REQ goes out on reconnect.
@@ -1467,7 +1473,7 @@ async fn run_session(
                                 }
                             }
                         } else {
-                            let said: String = said.chars().filter(|c| !c.is_control()).take(80).collect();
+                            let said = refusal_text(&said);
                             log::info!("[relays] {url} refused the authentication: {said}");
                             // Another answer may still be on its way.
                             if auth.in_flight.is_empty() {
@@ -1564,6 +1570,15 @@ mod tests {
         fn urls(&self) -> Vec<String> {
             self.set.urls()
         }
+    }
+
+    /// The reason a relay gives for refusing an authentication is logged, so
+    /// bidi overrides and zero-width characters must not survive in it.
+    #[test]
+    fn an_auth_refusal_reason_loses_bidi_and_zero_width_characters() {
+        let said = "re\u{202E}jec\u{200B}ted\u{2066}!\u{FEFF}\n";
+        assert_eq!(refusal_text(said), "rejected!");
+        assert_eq!(refusal_text(&"x".repeat(200)).len(), 80);
     }
 
     /// A relay that refuses the lookup with CLOSED and then hangs up has still

@@ -56,10 +56,9 @@ Relay order, health and backoff come from the `fray-relays` crate.
   times per connection. A challenge is answered only if it is non-empty
   printable ASCII of at most 256 bytes. A request closed `auth-required` is
   asked again once the relay accepts the answer.
-- Text a relay supplies for a `SubStatus` or a failure, such as a CLOSED
-  reason, has control, bidi and zero-width characters removed. The reason a
-  relay gives for refusing an authentication is logged with control
-  characters removed.
+- Text a relay supplies, such as a CLOSED reason or the reason it gives for
+  refusing an authentication, has control, bidi and zero-width characters
+  removed before it reaches the log or a `SubStatus`.
 - The crate's log lines use the target `fray_relay_client`.
 
 The layer is a pipe, not a gate. Events that pass these checks are still
