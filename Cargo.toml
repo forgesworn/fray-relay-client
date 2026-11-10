@@ -1,0 +1,20 @@
+[package]
+name = "fray-relay-client"
+description = "A small Nostr relay client: verified reads from a set of relays within a time limit, standing subscriptions, publish with acknowledgements, NIP-42 auth, and an in-memory fake for tests."
+version = "0.1.0"
+# The code uses let-chains, which need edition 2024.
+edition = "2024"
+license = "MIT"
+authors = ["decented"]
+repository = "https://github.com/forgesworn/fray-relay-client"
+
+[dependencies]
+decented-relays = { package = "fray-relays", git = "https://github.com/forgesworn/fray", rev = "4943413bb86a329c3ad9cc3180c02fd9186ef2ce" }
+futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+log = "0.4"
+nostr = "=0.44.8"
+# TLS for wss:// relays.
+rustls = { version = "0.23", default-features = false, features = ["ring", "std"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "net", "sync", "time", "macros"] }
+tokio-tungstenite = { version = "0.26.2", features = ["rustls-tls-webpki-roots"] }
