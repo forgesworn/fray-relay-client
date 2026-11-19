@@ -1,0 +1,13 @@
+# fray-relay-client
+
+> Rust Nostr relay client with bounded verified reads, standing subscriptions, publish acknowledgements and NIP-42 authentication.
+
+## Documentation
+
+- [Rust integration](https://github.com/forgesworn/fray-relay-client/blob/main/README.md): Client API, relay health, request limits and the in-memory test relay.
+
+## ForgeSworn ecosystem
+
+- [ForgeSworn library guide](https://forgesworn.dev/llms.txt): Find related libraries, tools and integration guides by task and runtime.
+- [ForgeSworn on GitHub](https://github.com/forgesworn): Browse the organisation’s public repositories.
+- [Project source](https://github.com/forgesworn/fray-relay-client): Canonical source repository, documentation and release information.
